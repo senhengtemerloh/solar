@@ -1,68 +1,118 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     fetch('Solar Repayments.xlsx')
-        .then(response => response.arrayBuffer())
+        .then(res => res.arrayBuffer())
         .then(data => {
             const workbook = XLSX.read(data, { type: 'array' });
-            const sheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[sheetName];
-            const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-            const plansContainer = document.getElementById('plans');
-            json.slice(3).forEach(row => {
-                if (row[1] && row[1].includes('SOL') || row[1].includes('BSL') || row[1].includes('CAD') || row[1].includes('PSN')) {
-                    const plan = document.createElement('div');
-                    plan.className = 'plan';
+            const plansContainer = document.getElementById('plans-container');
+            let currentBrand = '';
 
-                    const title = document.createElement('h2');
-                    title.textContent = row[1];
-                    plan.appendChild(title);
+            rows.forEach((row, index) => {
+                if (!row || row.length < 13) return;
 
-                    const details = document.createElement('div');
-                    details.className = 'details';
+                // Detect brand headers
+                if (row[1] === 'Solaroo' || row[1] === 'BSL' || 
+                    row[1] === 'Canadian Solar' || row[1] === 'Panasonic') {
+                    currentBrand = row[1];
+                    return;
+                }
 
-                    const system = document.createElement('div');
-                    system.innerHTML = `<strong>System (kWp):</strong> ${row[3]}`;
-                    details.appendChild(system);
+                // Skip header rows and empty rows
+                if (index < 4 || !row[2] || typeof row[2] !== 'string') return;
 
-                    const panels = document.createElement('div');
-                    panels.innerHTML = `<strong>No of Panels:</strong> ${row[4]}`;
-                    details.appendChild(panels);
+                // Create plan card
+                if (row[2].match(/SOL|BSL|CAD|PSN/)) {
+                    const planHtml = `
+                        <div class="plan-card">
+                            <h3 class="brand-header">${currentBrand}</h3>
+                            
+                            <div class="plan-details">
+                                <div>
+                                    <span class="plan-label">Plan</span>
+                                    <span class="plan-value">${row[2]}</span>
+                                </div>
+                                <div>
+                                    <span class="plan-label">System</span>
+                                    <span class="plan-value">${row[3]} kWp</span>
+                                </div>
+                                <div>
+                                    <span class="plan-label">Panels</span>
+                                    <span class="plan-value">${row[4]}</span>
+                                </div>
+                                <div>
+                                    <span class="plan-label">Savings</span>
+                                    <span class="plan-value">RM${formatRange(row[5])}</span>
+                                </div>
+                                <div>
+                                    <span class="plan-label">ROI</span>
+                                    <span class="plan-value">${formatROI(row[6])}</span>
+                                </div>
+                                <div>
+                                    <span class="plan-label">Price</span>
+                                    <span class="plan-value">RM${formatNumber(row[7])}</span>
+                                </div>
+                            </div>
 
-                    const savings = document.createElement('div');
-                    savings.innerHTML = `<strong>Savings:</strong> RM${row[5]}`;
-                    details.appendChild(savings);
+                            <div class="payment-plan">
+                                <h3>🔖 Chailease Financing</h3>
+                                <div class="plan-details">
+                                    <div>
+                                        <span class="plan-label">60mths</span>
+                                        <span class="plan-value">RM${formatCurrency(row[8])}</span>
+                                    </div>
+                                    <div>
+                                        <span class="plan-label">72mths</span>
+                                        <span class="plan-value">RM${formatCurrency(row[9])}</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                    const roi = document.createElement('div');
-                    roi.innerHTML = `<strong>ROI:</strong> ${parseFloat(row[6]).toFixed(2)}(±) years`;
-                    details.appendChild(roi);
+                            <div class="payment-plan">
+                                <h3>💳 IPP (0% Interest)</h3>
+                                <div class="plan-details">
+                                    <div>
+                                        <span class="plan-label">36mths</span>
+                                        <span class="plan-value">RM${formatCurrency(row[10])}</span>
+                                    </div>
+                                    <div>
+                                        <span class="plan-label">48mths</span>
+                                        <span class="plan-value">RM${formatCurrency(row[11])}</span>
+                                    </div>
+                                    <div>
+                                        <span class="plan-label">60mths</span>
+                                        <span class="plan-value">RM${formatCurrency(row[12])}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
 
-                    const price = document.createElement('div');
-                    price.innerHTML = `<strong>Price:</strong> RM${parseInt(row[7]).toLocaleString()}`;
-                    details.appendChild(price);
-
-                    const cl60 = document.createElement('div');
-                    cl60.innerHTML = `<strong>CL 60mths:</strong> RM${parseFloat(row[8]).toFixed(2)}`;
-                    details.appendChild(cl60);
-
-                    const cl72 = document.createElement('div');
-                    cl72.innerHTML = `<strong>CL 72mths:</strong> RM${parseFloat(row[9]).toFixed(2)}`;
-                    details.appendChild(cl72);
-
-                    const ipp36 = document.createElement('div');
-                    ipp36.innerHTML = `<strong>IPP 36mths:</strong> RM${parseFloat(row[10]).toFixed(2)}`;
-                    details.appendChild(ipp36);
-
-                    const ipp48 = document.createElement('div');
-                    ipp48.innerHTML = `<strong>IPP 48mths:</strong> RM${parseFloat(row[11]).toFixed(2)}`;
-                    details.appendChild(ipp48);
-
-                    const ipp60 = document.createElement('div');
-                    ipp60.innerHTML = `<strong>IPP 60mths:</strong> RM${parseFloat(row[12]).toFixed(2)}`;
-                    details.appendChild(ipp60);
-
-                    plan.appendChild(details);
-                    plansContainer.appendChild(plan);
+                    plansContainer.insertAdjacentHTML('beforeend', planHtml);
                 }
             });
-        });
+        })
+        .catch(error => console.error('Error loading data:', error));
 });
+
+// Formatting functions
+function formatRange(value) {
+    return (typeof value === 'string' ? value : value.toString())
+        .replace(/(\d+)\s*-\s*(\d+)/, '$1-$2')
+        .replace(/,/g, '-');
+}
+
+function formatROI(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? 'N/A' : `${num.toFixed(1)} (±) years`;
+}
+
+function formatNumber(value) {
+    return parseInt(value).toLocaleString('en-US');
+}
+
+function formatCurrency(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? 'N/A' : num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
