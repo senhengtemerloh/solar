@@ -1,0 +1,62 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #228B22;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.plan {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.plan:hover {
+    transform: translateY(-5px);
+}
+
+.plan h2 {
+    color: #228B22;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.plan p {
+    font-size: 1.1em;
+    margin: 5px 0;
+}
+
+.plan .details {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.plan .details div {
+    flex: 1 1 200px;
+    margin: 10px 0;
+}
+
+.plan .details div strong {
+    display: block;
+    color: #228B22;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
