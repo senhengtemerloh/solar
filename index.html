@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Air Conditioner Promotions</title>
+    <title>Premium AC Promotions | CoolLiving</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
             --primary: #2A5C82;
             --secondary: #F5F7FA;
             --accent: #FF6B35;
+            --teal: #2EC4B6;
+            --emerald: #2ECC71;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--teal) 100%);
         }
 
         * {
@@ -19,10 +22,11 @@
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
             line-height: 1.6;
-            background-color: var(--secondary);
+            background: var(--gradient);
             padding: 2rem 1rem;
+            min-height: 100vh;
         }
 
         .container {
@@ -30,117 +34,166 @@
             margin: 0 auto;
         }
 
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
             padding: 1rem 0;
         }
 
         .card {
-            background: white;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
 
         .card-image {
-            aspect-ratio: 4/3;
-            background: #f0f0f0;
+            aspect-ratio: 1/1;
+            background: #fff;
             position: relative;
             overflow: hidden;
+            padding: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         }
 
         .card-image img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 1rem;
+            mix-blend-mode: multiply;
             transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .card:hover .card-image img {
+            transform: scale(1.05);
         }
 
         .card-content {
             padding: 1.5rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            position: relative;
         }
 
-        .badge {
-            background: var(--accent);
+        .scoin-badge {
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--teal) 100%);
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85em;
-            display: inline-block;
-            margin-bottom: 0.75rem;
-        }
-
-        .price-group {
-            margin: 1rem 0;
-        }
-
-        .rcp {
-            color: #666;
-            text-decoration: line-through;
-            font-size: 0.9em;
-        }
-
-        .blk {
-            color: var(--primary);
-            font-size: 1.5em;
-            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            position: absolute;
+            top: -1.5rem;
+            right: 1.5rem;
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+            z-index: 2;
         }
 
         .brand-model {
             color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .scoin {
-            color: #2ecc71;
-            font-weight: 600;
-            margin-top: 0.75rem;
-            display: inline-block;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
         }
 
         .product-name {
-            color: #333;
+            color: #2d3748;
             margin: 0.5rem 0;
-            font-size: 1.1em;
+            font-size: 1.25em;
             line-height: 1.4;
+            font-weight: 600;
+            min-height: 3.5em;
+        }
+
+        .price-group {
+            margin: 1.5rem 0;
+            background: rgba(42, 92, 130, 0.05);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .rcp {
+            color: #718096;
+            text-decoration: line-through;
+            font-size: 0.95em;
+            margin-bottom: 0.25rem;
+        }
+
+        .blk {
+            color: var(--primary);
+            font-size: 1.75em;
+            font-weight: 800;
+            line-height: 1;
         }
 
         .currency::before {
             content: 'RM';
-            font-size: 0.8em;
-            margin-right: 2px;
-            opacity: 0.8;
+            font-size: 0.6em;
+            margin-right: 4px;
+            font-weight: 400;
+            vertical-align: super;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                margin-bottom: 2rem;
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 style="color: var(--primary); margin-bottom: 2rem; text-align: center">Premium Air Conditioner Promotions</h1>
+        <header class="header">
+            <h1 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 2.5em">CoolLiving AC Promotions</h1>
+            <p style="color: #4a5568; font-size: 1.1em">Exclusive Member Pricing & S-Coin Rebates</p>
+        </header>
         <div class="grid" id="products"></div>
     </div>
 
     <script>
-        function formatScoin(value) {
-            const num = parseFloat(value);
-            return num % 1 === 0 ? `${num}%` : `${num.toFixed(1)}%`;
+        function formatScoin(decimalValue) {
+            const percentage = decimalValue * 100;
+            return percentage % 1 === 0 
+                ? `${percentage}%` 
+                : `${percentage.toFixed(1)}%`;
         }
 
         function formatCurrency(value) {
             return new Intl.NumberFormat('en-MY', {
-                style: 'decimal',
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             }).format(value);
@@ -156,11 +209,12 @@
 
                 const container = document.getElementById('products');
                 
-                jsonData.forEach(item => {
+                jsonData.forEach((item, index) => {
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML = `
                         <div class="card-image">
+                            <div class="scoin-badge">${formatScoin(item.SCOIN)} S-Coin</div>
                             <img src="${item.URL}" alt="${item.NAME}" loading="lazy">
                         </div>
                         <div class="card-content">
@@ -170,13 +224,13 @@
                                 <div class="rcp currency">${formatCurrency(item.RCP)}</div>
                                 <div class="blk currency">${formatCurrency(item.BLK)}</div>
                             </div>
-                            <div class="scoin">+ ${formatScoin(item.SCOIN)} S-Coin Rebate</div>
                         </div>
                     `;
                     container.appendChild(card);
                 });
             } catch (error) {
                 console.error('Error loading spreadsheet:', error);
+                container.innerHTML = `<p style="color: white; text-align: center">Error loading products. Please try again later.</p>`;
             }
         }
 
