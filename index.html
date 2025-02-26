@@ -97,33 +97,30 @@
             bottom: 1rem;
             right: 1rem;
             background: rgba(255, 255, 255, 0.95);
-            padding: 0.8rem 1.2rem 0.8rem 2.5rem;
+            padding: 0.8rem 1.2rem;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
             backdrop-filter: blur(4px);
             border: 1px solid rgba(224, 242, 254, 0.5);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
         }
 
         .earn-label {
-            position: absolute;
-            left: -1.2rem;
-            transform: rotate(-90deg) translateX(-50%);
-            transform-origin: bottom left;
+            transform: rotate(-90deg);
             color: var(--primary);
             font-size: 0.75em;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            opacity: 0.9;
+            margin-right: -0.5rem;
         }
 
         .scoin-content {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: flex-start;
         }
 
         .scoin-value {
@@ -153,6 +150,7 @@
             font-size: 0.9em;
             letter-spacing: 0.5px;
             opacity: 0.8;
+            text-align: center;
         }
 
         .product-name {
@@ -162,6 +160,7 @@
             line-height: 1.3;
             font-weight: 600;
             min-height: 3em;
+            text-align: center;
         }
 
         .price-group {
@@ -169,6 +168,7 @@
             padding: 1rem;
             border-radius: 12px;
             background: rgba(224, 242, 254, 0.3);
+            text-align: center;
         }
 
         .rcp {
@@ -218,12 +218,7 @@
             }
             
             .scoin-badge {
-                padding-left: 2rem;
-            }
-            
-            .earn-label {
-                left: -1rem;
-                font-size: 0.7em;
+                padding: 0.6rem 1rem;
             }
         }
     </style>
