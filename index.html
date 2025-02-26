@@ -92,7 +92,7 @@
             transform: scale(1.05);
         }
 
-       .scoin-badge {
+        .scoin-badge {
             position: absolute;
             bottom: 1rem;
             right: 1rem;
@@ -146,20 +146,77 @@
             white-space: nowrap;
         }
 
+        .brand-model {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+            opacity: 0.8;
+        }
+
         .product-name {
-            font-size: 1.1em;
-            margin: 0.25rem 0;
-            line-height: 1.3;
-            min-height: 3em;
             color: #334155;
+            margin: 0.25rem 0;
+            font-size: 1.1em;
+            line-height: 1.3;
+            font-weight: 600;
+            min-height: 3em;
+        }
+
+        .price-group {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(224, 242, 254, 0.3);
+        }
+
+        .rcp {
+            color: #64748B;
+            text-decoration: line-through;
+            font-size: 0.95em;
+            margin-bottom: 0.25rem;
         }
 
         .blk {
+            color: var(--primary);
             font-size: 1.9em;
+            font-weight: 800;
+            line-height: 1;
             margin-top: 0.25rem;
         }
 
+        .currency::before {
+            content: 'RM';
+            font-size: 0.6em;
+            margin-right: 4px;
+            font-weight: 400;
+            vertical-align: super;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        .scoin-badge {
+            animation: float 3s ease-in-out infinite;
+        }
+
         @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .scoin-value {
+                font-size: 1.8em;
+            }
+            
             .scoin-badge {
                 padding-left: 2rem;
             }
@@ -167,10 +224,6 @@
             .earn-label {
                 left: -1rem;
                 font-size: 0.7em;
-            }
-            
-            .scoin-value {
-                font-size: 1.8em;
             }
         }
     </style>
@@ -215,8 +268,11 @@
                     card.innerHTML = `
                         <div class="card-image">
                             <div class="scoin-badge">
-                                <span class="scoin-value">${formatScoin(item.SCOIN)}</span>
-                                <span class="scoin-text">Earn S-Coin Rebate</span>
+                                <span class="earn-label">EARN</span>
+                                <div class="scoin-content">
+                                    <span class="scoin-value">${formatScoin(item.SCOIN)}</span>
+                                    <span class="scoin-text">S-Coin Rebate</span>
+                                </div>
                             </div>
                             <img src="${item.URL}" alt="${item.NAME}" loading="lazy">
                         </div>
